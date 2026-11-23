@@ -85,7 +85,7 @@ jobs:
 
       - name: Scan for advisories
         run: |
-          if [ -f deny.toml ]; then
+          if [ -f deny.toml ] || [ -f .deny.toml ] || [ -f .cargo/deny.toml ] || [ -f .config/deny.toml ]; then
             cargo deny check advisories
           else
             cat <<'EOF' > "$RUNNER_TEMP/deny.toml"
@@ -93,5 +93,5 @@ jobs:
           unmaintained = "workspace"
           yanked = "warn"
           EOF
-            cargo deny check --config "$RUNNER_TEMP/deny.toml" advisories
+            cargo deny --config "$RUNNER_TEMP/deny.toml" check advisories
           fi
