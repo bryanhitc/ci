@@ -93,5 +93,5 @@ jobs:
           unmaintained = "workspace"
           yanked = "warn"
           EOF
-            cargo deny -c "$RUNNER_TEMP/deny.toml" check advisories
+            cargo deny check --config "$RUNNER_TEMP/deny.toml" advisories
           fi
