@@ -1,0 +1,97 @@
+name: Reusable Rust CI
+
+on:
+  workflow_call:
+    inputs:
+      rust-version:
+        description: Rust toolchain to install (e.g. stable, nightly, 1.85.0)
+        type: string
+        default: stable
+      working-directory:
+        description: Directory containing Cargo.toml
+        type: string
+        default: '.'
+      cargo-args:
+        description: Extra arguments passed to cargo clippy and cargo test
+        type: string
+        default: '--all-targets'
+      clippy-args:
+        description: Extra arguments passed after `--` to cargo clippy
+        type: string
+        default: '-D warnings'
+      run-fmt:
+        description: Run cargo fmt --check
+        type: boolean
+        default: true
+      run-clippy:
+        description: Run cargo clippy
+        type: boolean
+        default: true
+      run-test:
+        description: Run cargo test
+        type: boolean
+        default: true
+      run-audit:
+        description: Run cargo deny check advisories
+        type: boolean
+        default: true
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  check:
+    name: Build, Lint & Test
+    if: ${{ inputs.run-fmt || inputs.run-clippy || inputs.run-test }}
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ${{ inputs.working-directory }}
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: dtolnay/rust-toolchain@master
+        with:
+          toolchain: ${{ inputs.rust-version }}
+          components: rustfmt, clippy
+
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: ${{ inputs.working-directory }}
+
+      - name: Check formatting
+        if: ${{ inputs.run-fmt }}
+        run: cargo fmt --all -- --check
+
+      - name: Run Clippy
+        if: ${{ inputs.run-clippy }}
+        run: cargo clippy ${{ inputs.cargo-args }} -- ${{ inputs.clippy-args }}
+
+      - name: Run tests
+        if: ${{ inputs.run-test }}
+        run: cargo test ${{ inputs.cargo-args }}
+
+  audit:
+    name: Security Audit
+    if: ${{ inputs.run-audit }}
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ${{ inputs.working-directory }}
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: taiki-e/install-action@cargo-deny
+
+      - name: Scan for advisories
+        run: |
+          if [ -f deny.toml ]; then
+            cargo deny check advisories
+          else
+            cat <<'EOF' > "$RUNNER_TEMP/deny.toml"
+          [advisories]
+          unmaintained = "workspace"
+          yanked = "warn"
+          EOF
+            cargo deny -c "$RUNNER_TEMP/deny.toml" check advisories
+          fi

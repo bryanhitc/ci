@@ -1,0 +1,32 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "github>bryanhitc/ci:base"
+  ],
+  "platformAutomerge": false,
+  "automergeType": "pr",
+  "automergeStrategy": "squash",
+  "ignoreTests": false,
+  "vulnerabilityAlerts": {
+    "automerge": true
+  },
+  "lockFileMaintenance": {
+    "enabled": true,
+    "schedule": ["before 5am on the first day of the month"],
+    "automerge": true
+  },
+  "packageRules": [
+    {
+      "description": "Group non-major updates after 14-day cooldown and auto-merge when CI is green",
+      "matchUpdateTypes": ["minor", "patch", "pin", "digest"],
+      "groupName": "all non-major dependencies",
+      "groupSlug": "all-minor-patch",
+      "automerge": true
+    },
+    {
+      "description": "Major updates open a PR for manual review after 14-day cooldown",
+      "matchUpdateTypes": ["major"],
+      "automerge": false
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+name: Validate CI Config
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    name: Validate Renovate & Workflow Configs
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Validate JSON syntax
+        run: |
+          for f in *.json; do
+            echo "Checking $f..."
+            jq empty "$f"
+          done
+
+      - name: Validate Renovate configs
+        run: |
+          npx --yes --package renovate renovate-config-validator base.json default.json renovate.json
