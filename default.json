@@ -17,9 +17,9 @@
   },
   "packageRules": [
     {
-      "description": "Exempt lockFileMaintenance from minimumReleaseAge (no single release timestamp; otherwise stability-days stays pending forever)",
+      "description": "Allow lockFileMaintenance without a single package timestamp while still syncing minimumReleaseAge to Cargo/npm",
       "matchUpdateTypes": ["lockFileMaintenance"],
-      "minimumReleaseAge": null
+      "minimumReleaseAgeBehaviour": "timestamp-optional"
     },
     {
       "description": "Group non-major updates after 14-day cooldown and auto-merge when CI is green",

@@ -5,6 +5,7 @@
     ":dependencyDashboard"
   ],
   "minimumReleaseAge": "14 days",
+  "minimumReleaseAgePackageManagerSync": true,
   "schedule": ["before 5am on monday"],
   "osvVulnerabilityAlerts": true,
   "vulnerabilityAlerts": {
