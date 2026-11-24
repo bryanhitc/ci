@@ -7,6 +7,8 @@
   "minimumReleaseAge": "7 days",
   "minimumReleaseAgePackageManagerSync": true,
   "schedule": ["before 5am on monday"],
+  "assignees": ["bryanhitc"],
+  "assignAutomerge": false,
   "osvVulnerabilityAlerts": true,
   "vulnerabilityAlerts": {
     "enabled": true,

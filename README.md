@@ -13,6 +13,7 @@ Single source of truth for GitHub Actions reusable workflows and Renovate depend
   - 7-day cooldown (`minimumReleaseAge`, synced to Cargo/package managers via `minimumReleaseAgePackageManagerSync`) on routine updates, scheduled Mondays before 5 AM.
   - 12-hour soak (`minimumReleaseAge`) on security fixes (`vulnerabilityAlerts` + `osvVulnerabilityAlerts`), scheduled at any time and grouped together into one PR so multi-advisory repos don't deadlock against `cargo deny check advisories`.
   - Dependency Dashboard enabled.
+  - Assigns `bryanhitc` with `assignAutomerge: false`, so PRs requiring manual review (e.g. `major` updates or `base.json` repos) notify immediately while auto-merge PRs stay silent unless CI/tests fail.
 - `default.json`: Extends `base.json` and adds PR-based auto-merge (`automergeType: "pr"`, `ignoreTests: false`) for code repositories with automated tests:
   - Groups `minor`/`patch`/`pin`/`digest` updates into a single weekly PR and auto-merges when CI passes.
   - Auto-merges the grouped security PR once CI passes.
