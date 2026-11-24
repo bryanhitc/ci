@@ -17,6 +17,11 @@
   },
   "packageRules": [
     {
+      "description": "Exempt lockFileMaintenance from minimumReleaseAge (no single release timestamp; otherwise stability-days stays pending forever)",
+      "matchUpdateTypes": ["lockFileMaintenance"],
+      "minimumReleaseAge": null
+    },
+    {
       "description": "Group non-major updates after 14-day cooldown and auto-merge when CI is green",
       "matchUpdateTypes": ["minor", "patch", "pin", "digest"],
       "groupName": "all non-major dependencies",
