@@ -19,13 +19,6 @@ Single source of truth for GitHub Actions reusable workflows and Renovate depend
   - Runs monthly `lockFileMaintenance` with auto-merge to keep transitive dependencies (e.g. `Cargo.lock`) patched.
   - Leaves `major` updates open for manual review.
 
-## One-Time GitHub Setup
-
-To allow other private repositories under your personal account to call reusable workflows in this private repo:
-
-1. Go to **Settings → Actions → General → Access** in `bryanhitc/ci`.
-2. Select **Accessible from repositories owned by 'bryanhitc' user** and click **Save**.
-
 ## Onboarding a Repository
 
 Add two small files to any target repository (and delete any legacy daily `audit.yml` cron workflows):
