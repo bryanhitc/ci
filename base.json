@@ -12,7 +12,8 @@
     "enabled": true,
     "schedule": ["at any time"],
     "minimumReleaseAge": "12 hours",
-    "groupName": null,
+    "groupName": "security updates",
+    "groupSlug": "security-updates",
     "addLabels": ["security"]
   }
 }

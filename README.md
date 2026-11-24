@@ -11,11 +11,11 @@ Single source of truth for GitHub Actions reusable workflows and Renovate depend
 ### Renovate Presets
 - `base.json`: Shared policy **without** auto-merge (ideal for infra/GitOps repos like `homelab`):
   - 7-day cooldown (`minimumReleaseAge`, synced to Cargo/package managers via `minimumReleaseAgePackageManagerSync`) on routine updates, scheduled Mondays before 5 AM.
-  - 12-hour soak (`minimumReleaseAge`) on security fixes (`vulnerabilityAlerts` + `osvVulnerabilityAlerts`), scheduled at any time and ungrouped.
+  - 12-hour soak (`minimumReleaseAge`) on security fixes (`vulnerabilityAlerts` + `osvVulnerabilityAlerts`), scheduled at any time and grouped together into one PR so multi-advisory repos don't deadlock against `cargo deny check advisories`.
   - Dependency Dashboard enabled.
 - `default.json`: Extends `base.json` and adds PR-based auto-merge (`automergeType: "pr"`, `ignoreTests: false`) for code repositories with automated tests:
   - Groups `minor`/`patch`/`pin`/`digest` updates into a single weekly PR and auto-merges when CI passes.
-  - Auto-merges security PRs individually once CI passes.
+  - Auto-merges the grouped security PR once CI passes.
   - Runs monthly `lockFileMaintenance` with auto-merge to keep transitive dependencies (e.g. `Cargo.lock`) patched.
   - Leaves `major` updates open for manual review.
 
